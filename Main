@@ -54,7 +54,7 @@ class BombBoard(tk.Frame):
                     self.tiles[i][j].config(text="X", bg="red")
 
 
-#de moeileksheid graad die je kan veranderen
+#de moeilijksheid graad die je kan veranderen
     def set_easy(self):
         self.size = 10
         self.num_bombs = 15
