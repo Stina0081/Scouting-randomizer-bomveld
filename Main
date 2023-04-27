@@ -1,0 +1,82 @@
+import random
+import tkinter as tk
+
+
+
+class BombBoard(tk.Frame):
+    def __init__(self, master=None, size=10, num_bombs=10):
+        super().__init__(master)
+        self.master = master
+        self.size = size
+        self.num_bombs = num_bombs
+        self.grid()
+        self.create_widgets()
+        self.create_board()
+        self.show_all_bombs()
+        
+
+
+    def create_widgets(self):
+        self.tiles = []
+        for i in range(self.size):
+            row = []
+            for j in range(self.size):
+                tile = tk.Button(self, text="", width=2)
+                tile.grid(row=i, column=j)
+                row.append(tile)
+            self.tiles.append(row)
+        
+
+        self.difficulty_frame = tk.Frame(self.master)
+        self.difficulty_frame.grid(row=self.size+1, column=0, columnspan=self.size)
+        self.easy_button = tk.Button(self.difficulty_frame, text="Fucking Noob", command=self.set_easy)
+        self.easy_button.pack(side=tk.LEFT)
+        self.medium_button = tk.Button(self.difficulty_frame, text="Okay", command=self.set_medium)
+        self.medium_button.pack(side=tk.LEFT)
+        self.hard_button = tk.Button(self.difficulty_frame, text="The best of the best", command=self.set_hard)
+        self.hard_button.pack(side=tk.LEFT)
+        
+
+
+    def create_board(self):
+        self.board = [[0 for _ in range(self.size)] for _ in range(self.size)]
+        for _ in range(self.num_bombs):
+            i = random.randint(0, self.size-1)
+            j = random.randint(0, self.size-1)
+            while self.board[i][j] == "B":
+                i = random.randint(0, self.size-1)
+                j = random.randint(0, self.size-1)
+            self.board[i][j] = "B"
+    def show_all_bombs(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.board[i][j] == "B":
+                    self.tiles[i][j].config(text="X", bg="red")
+
+
+#de moeileksheid graad die je kan veranderen
+    def set_easy(self):
+        self.size = 10
+        self.num_bombs = 15
+        self.reset_game()
+    def set_medium(self):
+        self.size = 10
+        self.num_bombs = 20
+        self.reset_game()
+    def set_hard(self):
+        self.size = 10
+        self.num_bombs = 30
+        self.reset_game()
+    def reset_game(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                self.tiles[i][j].destroy()
+        self.tiles = []
+        self.create_widgets()
+        self.create_board()
+        self.show_all_bombs()  
+        
+root = tk.Tk()
+root.title("Scouting game")
+game = BombBoard(root)
+game.mainloop()
